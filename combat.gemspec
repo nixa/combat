@@ -20,7 +20,6 @@ Gem::Specification.new do |s|
   s.files = %w(
       Readme.md
       LICENSE 
-      combat.yml
       Gemfile
       Gemfile.lock
       bin/combat
