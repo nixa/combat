@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name    = 'combat'
-  s.version = '0.7'
+  s.version = '0.71'
   s.date    = '2011-07-08'
   
   s.summary = "Deploy your iPhone and Android apps to clients with ease. It's like Capistrano, only for mobile apps."
@@ -9,6 +9,8 @@ Gem::Specification.new do |s|
   s.authors  = ['Tomislav Car']
   s.email    = ['tomislav@infinum.hr']
   s.homepage = 'http://github.com/infinum/combat'
+  
+  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   
   s.has_rdoc = true
   s.rdoc_options = ['--main', 'Readme.md']
