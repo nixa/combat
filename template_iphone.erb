@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title><%= @name %></title>
+    <style type="text/css" media="screen">
+      *{
+        font-family: Helvetica;
+      }
+      h1{
+        text-align: center;
+      }
+      p{
+        text-align: center;
+      }
+      #container{
+        width: 320px;
+        margin: 0px auto;
+      }
+      a{
+        background-color: #dc0021;
+        padding: 10px;
+        display: block;
+        color: white;
+        text-shadow: black 1px 1px 1px;
+        text-decoration: none;
+        border-radius: 10px;        
+        font-weight: bold;
+        text-align: center;
+      }
+      ol{
+        list-style-type: none;        
+        padding-left: 0px;        
+      }
+      li{
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <h1><%= @name %></h1>
+      <p>
+        To install <%= @name %> take 2 steps on your iPhone or iPad device:
+      </p>
+      <ol>
+          <li>
+            <a href="<%= @provision_file_name %>">
+              Install provisioning file<br/>
+              (only first time)
+            </a>
+          </li>
+          <li>
+            <a href="itms-services://?action=download-manifest&url=<%= @plist_file_url %>">
+              Install <%= @name %>
+            </a>
+          </li>
+      </ol>
+    </div>
+  </body>
+</html>
