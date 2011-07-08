@@ -1,10 +1,14 @@
-$LOAD_PATH.unshift File.dirname(__FILE__)
+#!/usr/bin/env ruby
+COMBAT_ROOT = File.join(File.dirname(File.expand_path(__FILE__)), '..')
+$:.unshift File.join(COMBAT_ROOT, 'lib')
 require "rubygems"
 require "bundler/setup"
 
 # gems and libraries
 require 'ostruct'
 require 'erb'
+require 'yaml'
+require 'thor'
 
 # local classes
 require 'settings'
@@ -42,6 +46,8 @@ class Combat < Thor
       system "scp index.html #{@config.user_and_host}:#{@config.path}"
       remove_file 'index.html'
       # system "scp -r app/config www-data@vz1.infinum.hr:l/labs.infinum.hr/rba/stage/config"    
+      
+      say "Successfully deployed to #{@config.url}"
     else
       say "Config not valid, please check"
     end
@@ -61,9 +67,10 @@ class Combat < Thor
     end
     
     def generate_html_file
-      erb = ERB.new(File.read("template_#{@config.type}.erb"))
+      erb = ERB.new(File.read(@config.template_file))
       erb.result(@config.get_binding)
     end    
   end
-
 end
+
+Combat.start

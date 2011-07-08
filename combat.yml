@@ -1,7 +1,0 @@
---- 
-:type: iphone
-:name: New project
-:host: my.hostname.com
-:path: /var/www/my.hostname.com/deploy_folder
-:url: http://my.hostname.com/deploy_folder
-:remote_user: www-data
