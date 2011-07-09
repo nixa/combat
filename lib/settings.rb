@@ -14,6 +14,7 @@ class Settings
     @plist_file = "#{@filename}.plist"
     @plist_file_url = "#{@url}#{@plist_file}"
     @template_file = "#{COMBAT_ROOT}/templates/template_#{@type}.erb"
+    @qrcode = "http://qrcode.kaywa.com/img.php?s=8&d=#{ERB::Util.url_encode(@url)}"
   end
   
   def user_and_host

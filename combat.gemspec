@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name    = 'combat'
-  s.version = '0.71'
+  s.version = '0.72'
   s.date    = '2011-07-08'
   
   s.summary = "Deploy your iPhone and Android apps to clients with ease. It's like Capistrano, only for mobile apps."
