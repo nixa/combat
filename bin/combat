@@ -18,9 +18,14 @@ class Combat < Thor
 
   desc "setup", "Setup a new mobile project for deploying"
   def setup
+    name = Dir['*.xcodeproj']
+    name = name.size == 1 ? name.first.gsub(/.xcodeproj/, '') : 'New project'
+    
+    type = 'iphone'
+    
     settings = {
-      :type => 'iphone',
-      :name => 'New project',
+      :type => type,
+      :name => name,
       :host => 'my.hostname.com',
       :path => '/var/www/my.hostname.com/deploy_folder',
       :url => 'http://my.hostname.com/deploy_folder',
@@ -30,6 +35,10 @@ class Combat < Thor
     unless File.exists?('combat.yml')
       create_file 'combat.yml', settings.to_yaml
     end
+    
+    system "mkdir -p deployed"
+    
+    say "Combat has been setup for #{name}. Copy your #{name}.mobileprovision, #{name}.plist and #{name}.ipa to the deploy/ folder"
   end
   
   desc "deploy", "Deploy a project to the server for testing"
@@ -40,12 +49,13 @@ class Combat < Thor
       system "ssh #{@config.user_and_host} 'mkdir -p #{@config.path}'"
       system "ssh #{@config.user_and_host} 'rm -fr #{@config.path}/*'"
       File.open('index.html', 'w+'){|x| 
-        str = generate_html_file
         x.puts generate_html_file
       }
       system "scp index.html #{@config.user_and_host}:#{@config.path}"
+      system "scp deployed/#{@config.provision_file_name} #{@config.user_and_host}:#{@config.path}"      
+      system "scp deployed/#{@config.plist_file} #{@config.user_and_host}:#{@config.path}"
+      system "scp deployed/#{@config.ipa_file} #{@config.user_and_host}:#{@config.path}"
       remove_file 'index.html'
-      # system "scp -r app/config www-data@vz1.infinum.hr:l/labs.infinum.hr/rba/stage/config"    
       
       say "Successfully deployed to #{@config.url}"
     else
