@@ -18,18 +18,34 @@ class Combat < Thor
 
   desc "setup", "Setup a new mobile project for deploying"
   def setup
+    defaults = load_defaults
     name = Dir['*.xcodeproj']
-    name = name.size == 1 ? name.first.gsub(/.xcodeproj/, '') : 'New project'
-    
-    type = 'iphone'
-    
+
+    if name.size == 1
+      name.first.gsub(/.xcodeproj/, '')
+      type = 'iphone'
+    else
+      name = Dir['AndroidManifest.xml']
+      
+      if name.size == 1
+        name = File.basename(Dir.pwd)
+        type = 'android'
+      else
+        name = 'New project'
+        type = 'iphone'
+      end
+    end
+
+    defaults[:path] = File.join(defaults[:path], type, name) if defaults[:path]
+    defaults[:url] = File.join(defaults[:url], type, name) if defaults[:url]
+
     settings = {
       :type => type,
       :name => name,
-      :host => 'my.hostname.com',
-      :path => '/var/www/my.hostname.com/deploy_folder',
-      :url => 'http://my.hostname.com/deploy_folder',
-      :remote_user => 'www-data'
+      :host => defaults[:host] || 'my.hostname.com',
+      :path => defaults[:path] || '/var/www/my.hostname.com/deploy_folder',
+      :url => defaults[:url] || 'http://my.hostname.com/deploy_folder',
+      :remote_user => defaults[:remote_user] || 'www-data'
     }    
 
     unless File.exists?('combat.yml')
@@ -38,7 +54,11 @@ class Combat < Thor
     
     system "mkdir -p deployed"
     
-    say "Combat has been setup for #{name}. Copy your #{name}.mobileprovision, #{name}.plist and #{name}.ipa to the deploy/ folder"
+    if settings[:type] == 'iphone'
+      say "Combat has been setup for #{name}. Copy your #{name}.mobileprovision, #{name}.plist and #{name}.ipa to the deploy/ folder"
+    else
+      say "Combat has been setup for #{name}."
+    end
   end
   
   desc "deploy", "Deploy a project to the server for testing"
@@ -48,14 +68,20 @@ class Combat < Thor
     if @config.valid?
       system "ssh #{@config.user_and_host} 'mkdir -p #{@config.path}'"
       system "ssh #{@config.user_and_host} 'rm -fr #{@config.path}/*'"
-      File.open('index.html', 'w+'){|x| 
+      
+      if @config.type == 'iphone'
+        system "scp deployed/#{@config.provision_file_name} #{@config.user_and_host}:#{@config.path}"      
+        system "scp deployed/#{@config.plist_file} #{@config.user_and_host}:#{@config.path}"
+        system "scp deployed/#{@config.ipa_file} #{@config.user_and_host}:#{@config.path}"
+      else
+        system "scp bin/*.apk #{@config.user_and_host}:#{@config.path}"
+      end
+      
+      File.open('deployed/index.html', 'w+'){|x| 
         x.puts generate_html_file
       }
-      system "scp index.html #{@config.user_and_host}:#{@config.path}"
-      system "scp deployed/#{@config.provision_file_name} #{@config.user_and_host}:#{@config.path}"      
-      system "scp deployed/#{@config.plist_file} #{@config.user_and_host}:#{@config.path}"
-      system "scp deployed/#{@config.ipa_file} #{@config.user_and_host}:#{@config.path}"
-      remove_file 'index.html'
+      system "scp deployed/index.html #{@config.user_and_host}:#{@config.path}"      
+      remove_file 'deployed/index.html'
       
       say "Successfully deployed to #{@config.url}"
     else
@@ -64,6 +90,15 @@ class Combat < Thor
   end
 
   no_tasks do
+    def load_defaults
+      defaults_file_path = File.expand_path('~/.combatrc')
+      if File.exists?(defaults_file_path)
+        YAML::load(File.read(defaults_file_path))
+      else
+        {}
+      end
+    end
+    
     def load_config
       string = File.read("combat.yml")
       yml = YAML::load(string)

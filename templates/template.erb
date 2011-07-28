@@ -40,9 +40,14 @@
     <div id="container">
       <h1><%= @name %></h1>
       <p>
-        To install <%= @name %> take 2 steps on your iPhone or iPad device:
+        <% if @type == 'iphone' %>
+          To install <%= @name %> take 2 steps on your iPhone or iPad device:
+        <% else %>
+          To install just click on the following link on your Android device:        
+        <% end %>
       </p>
       <ol>
+        <% if @type == 'iphone' %>
           <li>
             <a href="<%= @provision_file_name %>">
               Install provisioning file<br/>
@@ -54,6 +59,13 @@
               Install <%= @name %>
             </a>
           </li>
+        <% else %>
+          <li>
+            <a href="<%= @filename %>.apk">
+              Install <%= @name %>
+            </a>
+          </li>        
+        <% end %>
       </ol>
       <p>
         QR code to this page

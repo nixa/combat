@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name    = 'combat'
-  s.version = '0.75'
-  s.date    = '2011-07-11'
+  s.version = '0.8'
+  s.date    = '2011-07-29'
   
   s.summary = "Deploy your iPhone and Android apps to clients with ease. It's like Capistrano, only for mobile apps."
   s.description = "Deploy your iPhone and Android apps to clients with ease. It's like Capistrano, only for mobile apps."
@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
       bin/combat
       Readme.md
       lib/settings.rb
-      templates/template_iphone.erb
+      templates/template.erb
     )
 
     s.test_files = %w()

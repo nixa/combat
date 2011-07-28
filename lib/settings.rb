@@ -15,7 +15,7 @@ class Settings
     @plist_file = "#{@filename}.plist"
     @ipa_file = "#{@filename}.ipa"
     @plist_file_url = "#{@url}#{@plist_file}"
-    @template_file = options[:template] || "#{COMBAT_ROOT}/templates/template_#{@type}.erb"
+    @template_file = options[:template] || "#{COMBAT_ROOT}/templates/template.erb"
     @qrcode = "http://qrcode.kaywa.com/img.php?s=8&d=#{ERB::Util.url_encode(@url)}"
   end
   

@@ -20,9 +20,18 @@ This creates a new <tt>config.yml</tt>.
 To run a new deploy type
 
     combat deploy
+    
+# Configuration
+
+Create a <tt>~/.combatrc</tt> with default configuration for all combat projects, like this example:
+
+    --- 
+    :host: my.server.com
+    :path: /var/www/myserver/mobile_apps/
+    :url: http://my.server.com/mobile_apps    
 
 # TODO
 
 Todo stuff:
 
- * Android support
+ * Test Android support
