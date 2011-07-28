@@ -22,7 +22,7 @@ class Combat < Thor
     name = Dir['*.xcodeproj']
 
     if name.size == 1
-      name.first.gsub(/.xcodeproj/, '')
+      name = name.first.gsub(/.xcodeproj/, '')
       type = 'iphone'
     else
       name = Dir['AndroidManifest.xml']
@@ -55,7 +55,7 @@ class Combat < Thor
     system "mkdir -p deployed"
     
     if settings[:type] == 'iphone'
-      say "Combat has been setup for #{name}. Copy your #{name}.mobileprovision, #{name}.plist and #{name}.ipa to the deploy/ folder"
+      say "Combat has been setup for #{name}. Copy your #{name}.mobileprovision, #{name}.plist and #{name}.ipa to the deployed/ folder"
     else
       say "Combat has been setup for #{name}."
     end
