@@ -68,8 +68,13 @@
         <% end %>
       </ol>
       <p>
-        QR code to this page
-        <img src="<%= @qrcode %>" />
+        <% if @type == 'android' %>
+          Use QR code to install APK
+          <img src="<%= @qrcode %>" />
+        <% else %>
+          QR code to this page
+          <img src="<%= @qrcode %>" />
+        <% end %>
       </p>
     </div>
   </body>

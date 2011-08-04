@@ -16,7 +16,12 @@ class Settings
     @ipa_file = "#{@filename}.ipa"
     @plist_file_url = "#{@url}#{@plist_file}"
     @template_file = options[:template] || "#{COMBAT_ROOT}/templates/template.erb"
-    @qrcode = "http://qrcode.kaywa.com/img.php?s=8&d=#{ERB::Util.url_encode(@url)}"
+    
+    if (type == 'android')
+      @qrcode = "http://qrcode.kaywa.com/img.php?s=8&d=#{ERB::Util.url_encode(@url)}#{@filename}.apk"
+    else
+      @qrcode = "http://qrcode.kaywa.com/img.php?s=8&d=#{ERB::Util.url_encode(@url)}"
+    end
   end
   
   def user_and_host
