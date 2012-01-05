@@ -3,6 +3,7 @@ class Settings
   
   def initialize(options)
     @name = options[:name]
+    @filename = options[:filename]
     @url = options[:url]
     @url+= "/" unless @url.match(/\/$/)
     @host = options[:host]
@@ -10,7 +11,10 @@ class Settings
     @type = options[:type]
     @remote_user = options[:remote_user]
 
-    @filename = @name.gsub(" ", "_")
+    if @filename.nil? || @filename.empty?
+      @filename = @name.gsub(" ", "_") 
+    end
+    
     @provision_file_name = "#{@filename}.mobileprovision"
     @plist_file = "#{@filename}.plist"
     @ipa_file = "#{@filename}.ipa"
