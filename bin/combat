@@ -74,7 +74,7 @@ class Combat < Thor
         system "scp deployed/#{@config.plist_file} #{@config.user_and_host}:#{@config.path}"
         system "scp deployed/#{@config.ipa_file} #{@config.user_and_host}:#{@config.path}"
       else
-        system "scp bin/*.apk #{@config.user_and_host}:#{@config.path}"
+        system "scp bin/#{@config.filename}.apk #{@config.user_and_host}:#{@config.path}"
       end
       
       File.open('deployed/index.html', 'w+'){|x| 
